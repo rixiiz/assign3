@@ -1,0 +1,9 @@
+1. Set up starter React app structure
+- What I did: forked and cloned into local machine, and set up dependencies
+- What happened: started exploring the codebase
+
+2. Replaced starter content with tic tac toe component skeleton
+- What I did: removed the starter UI and added a skeleton version of the game
+  structure containing the components Square, Board, and App
+- What happened: the app changed from the template page to an initial structure
+  of the game
