@@ -7,3 +7,16 @@
   structure containing the components Square, Board, and App
 - What happened: the app changed from the template page to an initial structure
   of the game
+
+3. Implemented functions to render squares and click handlers
+- What I did: updated Square component to take value and onSquareClick props
+  as function parameters so that each square could update UI and respond to
+  clicks
+- What happened: the square component became usable and ready to work with board
+  state 
+
+4. Added board state and player turn logic
+- What I did: added state for the board and current turn, and implemented logic 
+  so that squares update with 'X' or 'O'
+- What happened: players could now click squares and take turns
+
