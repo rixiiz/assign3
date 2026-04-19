@@ -155,6 +155,49 @@ class TestChorusLapilli(unittest.TestCase):
         tiles[0].click()
         self.assertTileIs(tiles[0], self.SYMBOL_X)
 
+    def test_no_moves_allowed_after_win(self):
+        '''Check that no more moves can be made after a player wins.'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+
+        # X wins across the top row
+        tiles[0].click()  # X
+        tiles[3].click()  # O
+        tiles[1].click()  # X
+        tiles[4].click()  # O
+        tiles[2].click()  # X wins
+
+        self.assertTileIs(tiles[0], self.SYMBOL_X)
+        self.assertTileIs(tiles[1], self.SYMBOL_X)
+        self.assertTileIs(tiles[2], self.SYMBOL_X)
+
+        # further clicks should do nothing
+        tiles[5].click()
+        self.assertTileIs(tiles[5], self.SYMBOL_BLANK)
+
+    def test_second_click_places_o(self):
+        '''Check that turns alternate from X to O.'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+
+        tiles[0].click()  # X
+        tiles[1].click()  # O
+
+        self.assertTileIs(tiles[0], self.SYMBOL_X)
+        self.assertTileIs(tiles[1], self.SYMBOL_O)
+
+    def test_cannot_overwrite_filled_square(self):
+        '''Check that clicking an occupied square does not overwrite it.'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+
+        tiles[0].click()  # X goes in top-left
+        self.assertTileIs(tiles[0], self.SYMBOL_X)
+
+        tiles[0].click()  # clicking again should do nothing
+        self.assertTileIs(tiles[0], self.SYMBOL_X)
+
+        # next valid move should still be O
+        tiles[1].click()
+        self.assertTileIs(tiles[1], self.SYMBOL_O)
+
 
 # ================= [DO NOT MAKE ANY CHANGES BELOW THIS LINE] =================
 
