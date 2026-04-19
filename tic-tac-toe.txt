@@ -31,3 +31,7 @@
 7. Added draw detection (when board is full and no winner)
 - What I did: added logic to detect when the board is full and no winner exists
 - What happened: the game can now end in a draw
+
+8. Added helpful comments
+- What I did: explained what each part of the code does
+- What happened: code can now be understood and built on by other engineers
