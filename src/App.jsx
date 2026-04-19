@@ -38,10 +38,9 @@ function calculateWinner(squares){
 // isSelectd indicates if this square is currently selected for move phase
 function Square({value, onSquareClick, isSelected}){
   return (
-    <button className="square" onClick={onSquareClick}>
+    // style is used to visually distinguish a selected square from the rest
+    <button className="square" onClick={onSquareClick} style={isSelected ? {backgroundColor: '#ffeeba'} : {}}>
       {value}
-      {/* * is used to visually mark the selected square */}
-      {isSelected ? ' *' : ''}
     </button>
   )
 }
