@@ -3,6 +3,29 @@ import * as ReactBootstrap from 'react-bootstrap'
 
 const { Badge, Button, Card } = ReactBootstrap
 
+function calculateWinner(squares){
+  const possibleWinCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  for(let i=0;i<possibleWinCombinations.length;i++){
+    const [a, b, c] = possibleWinCombinations[i];
+
+    if(squares[a] !== null && squares[a] === squares[b] && squares[a] === squares[c]){
+      return squares[a];
+    }
+  }
+
+  return null;
+}
+
 function Square({value, onSquareClick}){
   return (
     <button className="square" onClick={onSquareClick}>
@@ -12,16 +35,40 @@ function Square({value, onSquareClick}){
 }
 
 function Board({turn, squares, onPlay}){
+  const winner = calculateWinner(squares);
+
+  let isBoardFull = true;
+  for(let i=0;i<squares.length;i++){
+    if(squares[i] === null){
+      isBoardFull = false;
+      break;
+    }
+  }
+
+  const isDraw = isBoardFull && !winner;
+
   function handleClick(index){
-    if(squares[index] !== null) return;
+    if(squares[index] !== null || winner) return;
+
     const newSquares = squares.slice();
     newSquares[index] = turn ? 'X' : 'O';
     onPlay(newSquares);
   }
 
+  let status;
+  if(winner){
+    status = `Winner: ${winner}`;
+  }
+  else if(isDraw){
+    status = 'Draw!';
+  }
+  else{
+    status = `Next player: ${turn ? 'X' : 'O'}`;
+  }
+
   return(
     <>
-      <div className="status">Next player: {turn ? 'X' : 'O'}</div>
+      <div className="status">{status}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />

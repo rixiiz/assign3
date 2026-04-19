@@ -20,3 +20,14 @@
   so that squares update with 'X' or 'O'
 - What happened: players could now click squares and take turns
 
+5. Implemented winner detection function
+- What I did: created calculateWinner(squares) to check all winning combinations
+- What happened: the game is now winnable for players
+
+6. Improved game status display
+- What I did: introduced a status variable for displayed messages
+- What happened: the UI became easier to read
+
+7. Added draw detection (when board is full and no winner)
+- What I did: added logic to detect when the board is full and no winner exists
+- What happened: the game can now end in a draw
