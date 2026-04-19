@@ -21,7 +21,7 @@
 - What happened: the game now disallows moves that keep the center square 
   occupied but doesn't win
 
-5. Changed the draw logic
+5. Removed the draw logic
 - What I did: removed the old draw logic that checked whether the board was full
 - What happened: chorus lapilli does not have a draw condition
 
@@ -40,3 +40,9 @@
 - What happened: before selecting a square, it tells the user to select one, 
   and after selecting a square, it tells the user to choose an adjacent empty 
   square
+
+8. Show selected piece on board
+- What I did: updated square so that a selected square is visually distinguished
+  from the other squares
+- What happened: made it easier for the user to tell which square was chosen
+  during the first click of the move phase
