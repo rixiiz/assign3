@@ -45,9 +45,66 @@ function Square({value, onSquareClick}){
 
 // board component
 // renders all 9 squares, determines game state, and handles click logic
-function Board({turn, squares, onPlay}){
+function Board({turn, squares, onPlay, selectedSquare, setSelectedSquare}){
   // check for winner
   const winner = calculateWinner(squares);
+
+  let xCount = 0;
+  let oCount = 0;
+  for(let i=0;i<squares.length;i++){
+    if(squares[i] === 'X'){
+      xCount++;
+    }
+    else if(squares[i] === 'O'){
+      oCount++;
+    }
+  }
+
+  const currentPlayer = turn ? 'X' : 'O';
+
+  let isMovePhase = false;
+  if(currentPlayer === 'X' && xCount === 3){
+    isMovePhase = true;
+  }
+  else if(currentPlayer === 'O' && oCount === 3){
+    isMovePhase = true;
+  }
+
+  function isAdjacent(fromIndex, toIndex){
+    const fromRow = Math.floor(fromIndex / 3);
+    const fromCol = fromIndex % 3;
+    const toRow = Math.floor(toIndex / 3);
+    const toCol = toIndex % 3;
+
+    const rowDiff = Math.abs(fromRow - toRow);
+    const colDiff = Math.abs(fromCol - toCol);
+
+    return rowDiff <= 1 && colDiff <= 1 && !(rowDiff === 0 && colDiff === 0);
+  }
+
+  function mustVacateOrWin(fromIndex, toIndex){
+    if(!isMovePhase){
+      return false;
+    }
+    if(squares[4] !== currentPlayer){
+      return false;
+    }
+
+    const newSquares = squares.slice();
+    newSquares[fromIndex] = null;
+    newSquares[toIndex] = currentPlayer;
+
+    const newWinner = calculateWinner(newSquares);
+    if(newWinner === currentPlayer){
+      return false;
+    }
+
+    if(fromIndex === 4){
+      return false;
+    }
+
+    return true;
+  }
 
   // check if board is full (all non-null)
   let isBoardFull = true;
@@ -64,7 +121,9 @@ function Board({turn, squares, onPlay}){
   // click handler (when user clicks on a square)
   function handleClick(index){
     // square can't be already filled and a player hasn't won yet
-    if(squares[index] !== null || winner) return;
+    if(squares[index] !== null || winner){
+      return;
+    }
 
     // copies the board and send the updated board to App
     const newSquares = squares.slice();
@@ -116,12 +175,14 @@ export default function App() {
   const [turn, setTurn] = React.useState(true);
   // squares array stores board state
   const [squares, setSquares] = React.useState(Array(9).fill(null));
+  const [selectedSquare, setSelectedSquare] = React.useState(null);
 
   // function that handles UI when a move is made
   function handlePlay(newSquares){
     // updates board and switches turns
     setSquares(newSquares);
     setTurn(!turn);
+    setSelectedSquare(null);
   }
 
   return(
@@ -129,7 +190,7 @@ export default function App() {
       <Card className="starter-card shadow-sm">
         <Card.Body className="p-4">
           {/* passes state and handler to board */}
-          <Board turn={turn} squares={squares} onPlay={handlePlay} />
+          <Board turn={turn} squares={squares} onPlay={handlePlay} selectedSquare={selectedSquare} setSelectedSquare={setSelectedSquare} />
         </Card.Body>
       </Card>
     </div>

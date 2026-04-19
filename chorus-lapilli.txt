@@ -1,0 +1,22 @@
+1. Added move selection state
+- What I did: added state to track which square is currently selected during
+  the move phase
+- What happened: starting from the 4th move, each move is done with selecting
+  a square and a destination
+
+2. Detect placement phase and move phase by counting player squares
+- What I did: added logic to count how many X or O squares are on the board, 
+  then used that to determine if the current player should still be placing 
+  squares or should now be moving squares
+- What happened: game can now know when players should play or move squares
+
+3. Added adjacency check for moving squares
+- What I did: added a helper function to determine whether one square is adjacent
+  to another, which includes horizontal, vertical, and diagonal
+- What happened: moves can now only move to an adjacent empty square
+
+4. Implemented center square rule during move phase 
+- What I did: if current player has 3 squares and one is the center one, then 
+  their move must either win or move that square away
+- What happened: the game now disallows moves that keep the center square 
+  occupied but doesn't win
