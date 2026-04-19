@@ -41,7 +41,7 @@
   and after selecting a square, it tells the user to choose an adjacent empty 
   square
 
-8. Show selected piece on board
+8. Show selected square on board
 - What I did: updated square so that a selected square is visually distinguished
   from the other squares
 - What happened: made it easier for the user to tell which square was chosen
