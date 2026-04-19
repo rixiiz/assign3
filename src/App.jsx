@@ -106,28 +106,64 @@ function Board({turn, squares, onPlay, selectedSquare, setSelectedSquare}){
     return true;
   }
 
-  // check if board is full (all non-null)
-  let isBoardFull = true;
-  for(let i=0;i<squares.length;i++){
-    if(squares[i] === null){
-      isBoardFull = false;
-      break;
-    }
-  }
-
-  // draw if board is full and no winner
-  const isDraw = isBoardFull && !winner;
-
   // click handler (when user clicks on a square)
   function handleClick(index){
-    // square can't be already filled and a player hasn't won yet
-    if(squares[index] !== null || winner){
+    if(winner){
       return;
     }
 
-    // copies the board and send the updated board to App
+    // placement phase
+    if(!isMovePhase){
+      if(squares[index] !== null){
+        return;
+      }
+
+      const newSquares = squares.slice();
+      newSquares[index] = turn ? 'X' : 'O';
+      onPlay(newSquares);
+      return;
+    }
+
+    // move phase
+    
+    // first click
+    if(selectedSquare === null){
+      if(squares[index] !== currentPlayer){
+        return;
+      }
+      setSelectedSquare(index);
+      return;
+    }
+
+    // clicking the same square cancels selection
+    if(index === selectedSquare){
+      setSelectedSquare(null);
+      return;
+    }
+
+    // second click must be empty square
+    if(squares[index] !== null){
+      setSelectedSquare(null);
+      return;
+    }
+
+    // second click must be adjacent square
+    if(!isAdjacent(selectedSquare, index)){
+      setSelectedSquare(null);
+      return;
+    }
+
+    // center square rule
+    if(mustVacateOrWin(selectedSquare, index)){
+      selectedSquare(null);
+      return;
+    }
+
+    // valid move
     const newSquares = squares.slice();
-    newSquares[index] = turn ? 'X' : 'O';
+    newSquares[selectedSquare] = null;
+    newSquares[index] = currentPlayer;
+    setSelectedSquare(null);
     onPlay(newSquares);
   }
 
@@ -136,8 +172,13 @@ function Board({turn, squares, onPlay, selectedSquare, setSelectedSquare}){
   if(winner){
     status = `Winner: ${winner}`;
   }
-  else if(isDraw){
-    status = 'Draw!';
+  else if(isMovePhase){
+    if(selectedSquare === null){
+      status = `Next player: ${turn ? 'X' : 'O'} (select a piece to move)`;
+    }
+    else{
+      status = `Next player: ${turn ? 'X' : 'O'} (select an adjacent empty square)`;
+    }
   }
   else{
     status = `Next player: ${turn ? 'X' : 'O'}`;

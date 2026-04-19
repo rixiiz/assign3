@@ -20,3 +20,23 @@
   their move must either win or move that square away
 - What happened: the game now disallows moves that keep the center square 
   occupied but doesn't win
+
+5. Changed the draw logic
+- What I did: removed the old draw logic that checked whether the board was full
+- What happened: chorus lapilli does not have a draw condition
+
+6. Updated click handler in board to support placement and move phases
+- What I did: changed handleClick so that when the current player has less than
+  3 squares, a click behaves like before. But otherwise, the first click selects
+  one of the current player's own squares, and the second click either resets
+  selection on clicking on the same square again or violating the rules 
+  (filled square, non adjacent square, center rule) or performs the move
+- What happened: a selected square can now move to a valid adjacent empty square,
+  then the turn would change
+
+7. Updated status message for move selection
+- What I did: changed the status message logic so that the UI tells the player 
+  what step they are on during move phase 
+- What happened: before selecting a square, it tells the user to select one, 
+  and after selecting a square, it tells the user to choose an adjacent empty 
+  square
