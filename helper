@@ -123,11 +123,16 @@ case "$1" in
         ;;
     test)
         shift
-        ./venv/bin/python test_chorus_lapilli.py "$@"
+        if [ "$1" = "headless" ]; then
+            export MOZ_HEADLESS=1
+            ./venv/bin/python test_chorus_lapilli.py
+        else
+            ./venv/bin/python test_chorus_lapilli.py "$@"
+        fi
         ;;
     test-docker)
         shift
-        docker run --rm -v .:/test -w /test ${IMAGE} python3 test_chorus_lapilli.py headless 
+        docker run --rm -e MOZ_HEADLESS=1 -v .:/test -w /test ${IMAGE} python3 test_chorus_lapilli.py
         ;;
     clean)
         rm -rf package-lock.json node_modules
