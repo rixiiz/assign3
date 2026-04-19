@@ -46,3 +46,7 @@
   from the other squares
 - What happened: made it easier for the user to tell which square was chosen
   during the first click of the move phase
+
+9. Improved helpful comments
+- What I did: improved explaination on what each part of the code does
+- What happened: code can now be understood and built on by other engineers
