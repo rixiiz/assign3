@@ -1,49 +1,92 @@
+Setup:
+- Started from completed tic-tac-toe implementation
+- Continued using ./helper dev to check live changes
+
 1. Added move selection state
-- What I did: added state to track which square is currently selected during
-  the move phase
-- What happened: starting from the 4th move, each move is done with selecting
-  a square and a destination
+- What I did: 
+  - added new react state variables selectedSquare using useState(null)
+  - passed selectedSquare and setSelectedSquare from App to Board as props
+- What happened: starting from when a player has 3 squares, each move is done 
+  with selecting a square and a destination
 
 2. Detect placement phase and move phase by counting player squares
-- What I did: added logic to count how many X or O squares are on the board, 
-  then used that to determine if the current player should still be placing 
-  squares or should now be moving squares
+- What I did: 
+  - added variables xCount and oCount inside Board
+  - iterated through squares array using a loop and incremented xCount if 
+    value === 'X' or incremented oCount if value === 'O'
+  - determined currentPlayer using turn (true = X, false = O)
+  - created boolean isMovePhase, where true if current player already has 3 
+    squares on board and false otherwise
 - What happened: game can now know when players should play or move squares
 
 3. Added adjacency check for moving squares
-- What I did: added a helper function to determine whether one square is adjacent
-  to another, which includes horizontal, vertical, and diagonal
+- What I did:
+  - created helper function isAdjacent(fromIndex, toIndex)
+  - converted indices to row/column using row = Math.floor(index / 3) and
+    col = index % 3
+  - computed rowDiff and colDiff using absolute difference
+  - allowed move only if rowDiff <= 1 and colDiff <= 1 and not the same square
 - What happened: moves can now only move to an adjacent empty square
 
 4. Implemented center square rule during move phase 
-- What I did: if current player has 3 squares and one is the center one, then 
-  their move must either win or move that square away
+- What I did:
+  - created helper function mustVacateOrWin(fromIndex, toIndex)
+  - checked if game is in move phase 
+  - check if current player occupies center square (index 4)
+  - simulated move by copying squares array:
+    - set fromIndex to null
+    - set toIndex to currentPlayer
+  - checked:
+    - if simulated move results in win, which is allowed
+    - if moving center square itself, which is allowed
+    - otherwise, which is disallowed
 - What happened: the game now disallows moves that keep the center square 
   occupied but doesn't win
 
 5. Removed the draw logic
-- What I did: removed the old draw logic that checked whether the board was full
+- What I did: 
+  - removed loop that checked if board was full
+  - removed isDraw variable and related status condition
 - What happened: chorus lapilli does not have a draw condition
 
 6. Updated click handler in board to support placement and move phases
-- What I did: changed handleClick so that when the current player has less than
-  3 squares, a click behaves like before. But otherwise, the first click selects
-  one of the current player's own squares, and the second click either resets
-  selection on clicking on the same square again or violating the rules 
-  (filled square, non adjacent square, center rule) or performs the move
+- What I did:
+  - modified handleClick(index) function:
+    - placement phase: if square is empty, copy squares using slice(), placed 
+      'X' or 'O', and called onPlay(newSquares)
+    - move phase:
+      - first click: if selectedSquare is null, then only allow selecting squares 
+        belonging to current player and store index in selectedSquare
+      - second click: 
+        - if same square, cancel selection
+        - if square is occupied, reset selection
+        - if not adjacent, reset selection
+        - if violates center rule, reset selection
+        - otherwise:
+          - copy board
+          - move piece from selectedSquare to index
+          - set selectedSquare to null
+          - call onPlay(newSquares)
 - What happened: a selected square can now move to a valid adjacent empty square,
-  then the turn would change
+  then the turn would change. Invalid moves reset selection
 
 7. Updated status message for move selection
-- What I did: changed the status message logic so that the UI tells the player 
-  what step they are on during move phase 
+- What I did:
+  - modified status variable logic:
+    - if winner, show winner
+    - if move phase:
+      - if no square selected, show "select a piece"
+      - if square selected, show "select an adjacent empty square"
+    - otherwise, show next player
 - What happened: before selecting a square, it tells the user to select one, 
   and after selecting a square, it tells the user to choose an adjacent empty 
   square
 
 8. Show selected square on board
-- What I did: updated square so that a selected square is visually distinguished
-  from the other squares
+- What I did:
+  - passed isSelected prop to Square component: 
+    isSelected = (selectedSquare === index)
+  - added visual styling (inline styles) to indicate selected square
 - What happened: made it easier for the user to tell which square was chosen
   during the first click of the move phase
 
@@ -56,3 +99,23 @@
   to check that turns alternate, and test to check that clicking on an 
   occupied square won't modify its value 
 - What happened: game is now more reliable and less prone to bugs
+
+Issues encountered:
+- initially used '*' to mark selected square but that caused layout issues since 
+  squares are only 34 pixels according to styles.css, so instead a used an inline
+  styling for background 
+- encountered issues where the helper script did not support headless, and fixed 
+  by asking a LLM to modify the helper script to use MOZ_HEADLESS=1 env variable
+- also error had "Process unexpectedly closed with status 255", which meant 
+  Firefox was not installed in WSL, so fixed by manually installing it
+
+Final result should have:
+- game obeys to the rule
+  - placement phase (first 3 moves)
+  - movement phase 
+  - adjacency restriction
+  - center rule 
+  - 2 click move feature
+- UI shows clear instructions
+- invalid moves reset 
+- game stops after winner is determined

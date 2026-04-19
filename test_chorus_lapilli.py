@@ -188,7 +188,7 @@ class TestChorusLapilli(unittest.TestCase):
         '''Check that clicking an occupied square does not overwrite it.'''
         tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
 
-        tiles[0].click()  # X goes in top-left
+        tiles[0].click()  # X goes in top left
         self.assertTileIs(tiles[0], self.SYMBOL_X)
 
         tiles[0].click()  # clicking again should do nothing

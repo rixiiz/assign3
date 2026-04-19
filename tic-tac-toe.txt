@@ -1,37 +1,79 @@
+Setup:
+- Cloned the repo to local machine
+- Opened project with WSL Ubuntu
+- Ran ./helper init to set up and install dependencies 
+- Ran ./helper dev to test development server
+
 1. Set up starter React app structure
-- What I did: forked and cloned into local machine, and set up dependencies
-- What happened: started exploring the codebase
+- What I did: explored the existing App.jsx starter file and project structure
+- What happened: confirmed react runs and render starter UI
 
 2. Replaced starter content with tic tac toe component skeleton
 - What I did: removed the starter UI and added a skeleton version of the game
-  structure containing the components Square, Board, and App
+  structure containing the components:
+  - Square: represents one tile 
+  - Board: contains 9 squares and game logic
+  - App: top level component that manages states
 - What happened: the app changed from the template page to an initial structure
   of the game
 
 3. Implemented functions to render squares and click handlers
-- What I did: updated Square component to take value and onSquareClick props
+- What I did: 
+  - updated Square component to take value and onSquareClick props
   as function parameters so that each square could update UI and respond to
   clicks
-- What happened: the square component became usable and ready to work with board
+  - passed these props from Board to each Square
+- What happened: the Square component became usable and ready to work with Board
   state 
 
 4. Added board state and player turn logic
-- What I did: added state for the board and current turn, and implemented logic 
-  so that squares update with 'X' or 'O'
+- What I did: 
+  - created state variable squares = Array(9).fill(null)
+  - created state variable turn (true = X, false = O)
+  - implemented handleClick:
+    - copied squares using slice()
+    - updated clicked index with 'X' or 'O'
+    - passed updated array to App using onPlay
+  - implemented handlePlay in App:
+    - updated squares state
+    - changed turn using setTurn(!turn)
 - What happened: players could now click squares and take turns
 
 5. Implemented winner detection function
-- What I did: created calculateWinner(squares) to check all winning combinations
+- What I did: 
+  - created calculateWinner(squares) to check all winning combinations
+  - defined all winning combinations (rows, columns, diagonals)
+  - looped through combinations and checked equality
 - What happened: the game is now winnable for players
 
 6. Improved game status display
-- What I did: introduced a status variable for displayed messages
+- What I did: 
+  - added a status variable in board
+  - if winner exists, show "Winner: X/O", otherwise, show "Next player: X/O"
+  - displayed status above board
 - What happened: the UI became easier to read
 
 7. Added draw detection (when board is full and no winner)
-- What I did: added logic to detect when the board is full and no winner exists
+- What I did: 
+  - iterated through squares to check if any null values remain
+  - created isDraw = board full and no winner
+  - updated status logic to display "Draw!" when applicable
 - What happened: the game can now end in a draw
 
 8. Added helpful comments
 - What I did: explained what each part of the code does
 - What happened: code can now be understood and built on by other engineers
+
+Issues encountered:
+- had trouble displaying components at first (trouble with syntax), and used 
+  the browser's console to debug
+- initially directly modifying squares array led to state update issues, so 
+  used .slice() to mitigate that
+
+Final result should have:
+- clickable board 
+- alternating turns 
+- winner detection 
+- draw detection 
+- UI status messages 
+- game stops after winner is determined
