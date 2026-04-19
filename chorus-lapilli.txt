@@ -50,3 +50,9 @@
 9. Improved helpful comments
 - What I did: improved explaination on what each part of the code does
 - What happened: code can now be understood and built on by other engineers
+
+10. Added 3 tests to chorus lapilli 
+- What I did: added test for not allowing moves after a player has won, test 
+  to check that turns alternate, and test to check that clicking on an 
+  occupied square won't modify its value 
+- What happened: game is now more reliable and less prone to bugs
